@@ -1,4 +1,6 @@
 function [guiFig]=alignParticles_gui()
+%This gui provides a user friendly interface to pick particles and then
+%align them with a given template.
 
     guiFig = figure('NumberTitle','off','Resize','off','Units','Pixels',...
              'Name','align particles user interface','Visible','on',...
