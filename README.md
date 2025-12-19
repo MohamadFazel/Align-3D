@@ -14,18 +14,23 @@ The two MAT-files contain the NPC template structure and a set of simulated, ran
 To use this software, you need to have MATLAB 2022 or higher versions. Simply download the software and set your MATLAB path to the software folder "Align-3D". You can now open the example script "Example_Align3D_NPC.m" and simply run it. It will load the template and the data and will align them. To use the gui, you should add the path to the folder "Codes" and type "alignParticles_gui" in the command window. The gui will pop-up. This gui provides a user friendly interface to pick particles and then
 align them using a given template. The gui has two section: "piack particles" and "align paticle". In the following, the description for each
 button and parameter is given. 
+
 pick particles section:
+
    LOAD DATA: 
    This button allow picking and loading the localizations. The
    localizations can be either 2D or 3D and the parameters must be (Xc,Yc,Zc)
    or (Xt,Yt,Zt). When the data is loaded the localizations are plotted on
    the left. The loaded data contains multiple similar structures, which
    can be picked one-by-one by zooming on them.
+   
    ADD LOCS:
    After zooming on an individual structure, this button adds the
    sturuvture to the set of picked particles and highlights it in red.
+   
    ROI counts: 
    Shows the number of picked structures/particles/ROIS.
+   
    SAVE PARTICLES:
    After picking all the structures, this button will save them into a mat-file
 
