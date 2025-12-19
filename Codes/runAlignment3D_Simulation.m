@@ -1,23 +1,9 @@
-%% generating template
+%% loading the template
 
-% Theta = 0:0.6981:2*pi;
-Theta = [0:pi/4:2*pi-0.1,0.12:pi/4:2*pi];
-R = 100;
-
-[X,Y] = pol2cart(Theta,R);
-figure;plot(X,Y,'.');
-xlim([-180 180]);ylim([-180 180])
-
-X = repmat(X,[1,2]);
-Y = repmat(Y,[1,2]);
-Z = [zeros(1,16),100*ones(1,16)];
-figure;plot3(X,Y,Z,'*')
-
-Temp.X = X;
-Temp.Y = Y;
-Temp.Z = Z;
+load('Template_NPC.mat')
 
 %% generating data
+
 tmpX = [];
 tmpY = [];
 tmpZ = [];
@@ -60,12 +46,14 @@ Data.Z = tmpZ;
 
 %% run the code
 
+addpath('Codes')
+
 Start.Theta = 0;
 Start.ShiftX = 0;
 Start.ShiftY = 0;
 Start.ShiftZ = 0;
 Cutoff = 50;
-NChain = 5000;
+NChain = 4000;
 PlotFlag = 1;
 
 align3D_template(Temp,Data,Start,Cutoff,NChain,PlotFlag,1);
