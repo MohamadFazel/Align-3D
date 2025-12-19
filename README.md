@@ -74,7 +74,7 @@ align particles section:
    This will save the generaged images in the png-format.
 
    # Support
-   If you happen to have any questions please shoot us an email at:
+   If you happen to have any questions please shoot me an email at:
 
    Mohamadreza Fazel, fazel.mohamadreza@gmail.com
    
