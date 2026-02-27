@@ -167,25 +167,51 @@ function [guiFig]=alignMulticolor_gui()
 
         XLimits = xlim;
         YLimits = ylim;
-        ID = Data.X > XLimits(1) & Data.X < XLimits(2) & ...
-            Data.Y > YLimits(1) & Data.Y < YLimits(2);
+        ID1 = Data(1).X > XLimits(1) & Data(1).X < XLimits(2) & ...
+            Data(1).Y > YLimits(1) & Data(1).Y < YLimits(2);
+        ID2 = Data(2).X > XLimits(1) & Data(2).X < XLimits(2) & ...
+            Data(2).Y > YLimits(1) & Data(2).Y < YLimits(2);
+        ID3 = Data(3).X > XLimits(1) & Data(3).X < XLimits(2) & ...
+            Data(3).Y > YLimits(1) & Data(3).Y < YLimits(2);
+        
         if isempty(Locs(1).X)
-            Locs(1).X = Data.X(ID);
-            Locs(1).Y = Data.Y(ID);
-            if isfield(Data,'Z')
-                Locs(1).Z = Data.Z(ID);
-            else
-                Locs(1).Z = zeros(size(Locs(1).Y));
+            for nn = 1:length(Data)
+                if nn == 1
+                    ID = ID1;
+                elseif nn == 2
+                    ID = ID2;
+                else
+                    ID = ID3;
+                end
+                Locs(1,nn).X = Data(nn).X(ID);
+                Locs(1,nn).Y = Data(nn).Y(ID);
+                if isfield(Data(1),'Z')
+                    Locs(1,nn).Z = Data(nn).Z(ID);
+                else
+                    Locs(1,nn).Z = zeros(size(Locs(1,1).Y));
+                end
             end
         else
-            Locs(end+1).X = Data.X(ID);
-            Locs(end).Y = Data.Y(ID);
-            if isfield(Data,'Z')
-                Locs(end).Z = Data.Z(ID);
-            else
-                Locs(end).Z = zeros(size(Locs(end).Y));
+            Locs(end+1,length(Data)).X = [];
+            Locs(end,length(Data)).Y = [];
+            for nn = 1:length(Data)
+                if nn == 1
+                    ID = ID1;
+                elseif nn == 2
+                    ID = ID2;
+                else
+                    ID = ID3;
+                end
+                Locs(end,nn).X = Data(nn).X(ID);
+                Locs(end,nn).Y = Data(nn).Y(ID);
+                if isfield(Data(1),'Z')
+                    Locs(end,nn).Z = Data(nn).Z(ID);
+                else
+                    Locs(end,nn).Z = zeros(size(Locs(end).Y));
+                end
             end
         end
+
         set(ROIcount,'String',length(Locs))
         Xs = linspace(XLimits(1),XLimits(2),10);
         Ys = linspace(YLimits(1),YLimits(2),10);
