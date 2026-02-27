@@ -8,14 +8,14 @@ function [guiFig]=alignMulticolor_gui()
 
     PickParticles=uipanel('Parent',guiFig,'Title','pick particles','Position',[0.79 0.52 0.187 0.46]);
 
-    uicontrol('Parent',PickParticles,'Style','pushbutton','String','LOAD DATA (REF)',...
+    uicontrol('Parent',PickParticles,'Style','pushbutton','String','LOAD DATA 1',...
         'Position',[14 180 100 30],'Callback',@loadData1)
 
     uicontrol('Parent',PickParticles,'Style','pushbutton','String','LOAD DATA 2',...
         'Position',[14 146 100 30],'Callback',@loadData2)
 
     uicontrol('Parent',PickParticles,'Style','pushbutton','String','LOAD DATA 3',...
-        'Position',[14 112 100 30],'Callback',@loadData3)
+        'Position',[14 112 100 30],'Callback',@loadData)
 
     uicontrol('Parent',PickParticles,'Style','pushbutton','String','ADD LOCS',...
         'Position',[14 78 100 30],'Callback',@addLOCS)
@@ -58,7 +58,7 @@ function [guiFig]=alignMulticolor_gui()
     Yall = [];
     Zall = [];
 
-    function loadData1(~,~)
+    function loadData(~,~)
         [filename, pathname]=uigetfile(pwd,'\*.mat;*.ics;*.h5');
         VariableInfo = who('-file', fullfile(pathname,filename));
         if ismember('Zc', VariableInfo)
@@ -67,54 +67,14 @@ function [guiFig]=alignMulticolor_gui()
             load(fullfile(pathname,filename),'Xc','Yc')
         end
         
-        Data(1).X = Xc;
-        Data(1).Y = Yc;
+        Data.X = Xc;
+        Data.Y = Yc;
         if ismember('Zc', VariableInfo)
-           Data(1).Z = Zc;
+           Data.Z = Zc;
         end
         
         hold(Ax,"on")
-        plot(Data(1).X,Data(1).Y,'.')
-        axis tight
-    end
-
-    function loadData2(~,~)
-        [filename, pathname]=uigetfile(pwd,'\*.mat;*.ics;*.h5');
-        VariableInfo = who('-file', fullfile(pathname,filename));
-        if ismember('Zc', VariableInfo)
-            load(fullfile(pathname,filename),'Xc','Yc','Zc')
-        else
-            load(fullfile(pathname,filename),'Xc','Yc')
-        end
-        
-        Data(2).X = Xc;
-        Data(2).Y = Yc;
-        if ismember('Zc', VariableInfo)
-           Data(2).Z = Zc;
-        end
-        
-        %hold(Ax,"on")
-        plot(Data(2).X,Data(2).Y,'.')
-        axis tight
-    end
-
-    function loadData3(~,~)
-        [filename, pathname]=uigetfile(pwd,'\*.mat;*.ics;*.h5');
-        VariableInfo = who('-file', fullfile(pathname,filename));
-        if ismember('Zc', VariableInfo)
-            load(fullfile(pathname,filename),'Xc','Yc','Zc')
-        else
-            load(fullfile(pathname,filename),'Xc','Yc')
-        end
-        
-        Data(3).X = Xc;
-        Data(3).Y = Yc;
-        if ismember('Zc', VariableInfo)
-           Data(3).Z = Zc;
-        end
-        
-        %hold(Ax,"on")
-        plot(Data(3).X,Data(3).Y,'.')
+        plot(Data.X,Data.Y,'.')
         axis tight
     end
 
