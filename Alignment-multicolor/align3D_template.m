@@ -96,6 +96,10 @@ for ii = 1:length(Input)
     end
 end
 
+X = Input(1).X;
+Y = Input(1).Y;
+Z = Input(1).Z;
+
 %Finding the initial difference (cost/error) between data and template
 Points = [X,Y,Z];
 [~,Dis] = knnsearch([TempX,TempY,TempZ],Points);
