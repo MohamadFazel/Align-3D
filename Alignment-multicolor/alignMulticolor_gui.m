@@ -251,7 +251,7 @@ function [guiFig]=alignMulticolor_gui()
         Xall = [];
         Yall = [];
         Zall = [];
-        for ii = 1:length(Locs)
+        for ii = 1:size(Locs,1)
 
             if ii/10 == floor(ii/10)
                 set(Iteration,'String',ii)
@@ -266,8 +266,8 @@ function [guiFig]=alignMulticolor_gui()
             NChain = 1000;
             PlotFlag = 0;
             VideoFlag = 0;
-            Locs(ii).Z = Locs(ii).Z*0.8;
-            tmp = align3D_template(Temp,Locs(ii),Start,Cutoff,NChain,PlotFlag,VideoFlag);
+            %Locs(ii,:).Z = Locs(ii,:).Z*0.8;
+            tmp = align3D_template(Temp,Locs(ii,:),Start,Cutoff,NChain,PlotFlag,VideoFlag);
             AlignedParticles(ii).X = tmp.X;
             AlignedParticles(ii).Y = tmp.Y;
             AlignedParticles(ii).Z = tmp.Z;

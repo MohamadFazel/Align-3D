@@ -84,17 +84,22 @@ end
 XLim = [min(TempX)-10 max(TempX)+10];
 YLim = [min(TempY)-10 max(TempY)+10];
 
-for ii = 1:length(Input)
+for ii = 1:size(Input,1)
+    for jj = 
     if size(Input(1).X,1) == 1
-        Input(ii).X = Input(ii).X'-mean(Input(ii).X);
-        Input(ii).Y = Input(ii).Y'-mean(Input(ii).Y);
-        Input(ii).Z = Input(ii).Z'-mean(Input(ii).Z);
+        Input(ii,).X = Input.X';
+        Y = Input.Y';
+        Z = Input.Z';
     else
-        Input(ii).X = Input(ii).X-mean(Input(ii).X);
-        Input(ii).Y = Input(ii).Y-mean(Input(ii).Y);
-        Input(ii).Z = Input(ii).Z-mean(Input(ii).Z);
+        X = Input.X;
+        Y = Input.Y;
+        Z = Input.Z;
     end
 end
+%Moving the center of mass of the data to the origin
+X = X - mean(X);
+Y = Y - mean(Y);
+Z = Z - mean(Z);
 
 %Finding the initial difference (cost/error) between data and template
 Points = [X,Y,Z];
