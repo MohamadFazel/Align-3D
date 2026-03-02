@@ -66,9 +66,10 @@ if VideoFlag == 1 && PlotFlag == 0
     error('to make a video PlotFlag must be 1 as well')
 end
 
-Aligned.X = [];
-Aligned.Y = [];
-Aligned.Z = [];
+NN = length(Input);
+Aligned(NN).X = [];
+Aligned(NN).Y = [];
+Aligned(NN).Z = [];
 
 %Moving the center of mass of template to the origin
 if size(Temp.X,1) == 1
@@ -153,23 +154,10 @@ end
 %of the cost/error decreases the proposed values are accepted.
 for nn = 2:NChain
     
-    %propose shifts and a rotation angle
-%     if nn < NChain/2
-%         Theta_P = Theta(nn-1)+0.3*randn();
-%         DelX_P = DelX(nn-1) + 0.5*randn();
-%         DelY_P = DelY(nn-1) + 0.5*randn();
-%         DelZ_P = DelZ(nn-1) + 0.5*randn();
-%     else
-%         Theta_P = Theta(nn-1)+0.1*randn();
-%         DelX_P = DelX(nn-1) + 0.02*randn();
-%         DelY_P = DelY(nn-1) + 0.02*randn();
-%         DelZ_P = DelZ(nn-1) + 0.02*randn();
-%     end
-    
     Theta_P = Theta(nn-1)+0.13*randn();
-        DelX_P = DelX(nn-1) + 0.2*randn();
-        DelY_P = DelY(nn-1) + 0.2*randn();
-        DelZ_P = DelZ(nn-1) + 0.2*randn();
+    DelX_P = DelX(nn-1) + 0.2*randn();
+    DelY_P = DelY(nn-1) + 0.2*randn();
+    DelZ_P = DelZ(nn-1) + 0.2*randn();
 
     %propose a rotation
     Points = [X,Y,Z];
@@ -235,9 +223,43 @@ for nn = 2:NChain
         DelX(nn) = DelX_P;
         DelY(nn) = DelY_P;
         DelZ(nn) = DelZ_P;
-        Aligned.X = Points(:,1);
-        Aligned.Y = Points(:,2); 
-        Aligned.Z = Points(:,3);
+        Aligned(1).X = Points(:,1);
+        Aligned(1).Y = Points(:,2); 
+        Aligned(1).Z = Points(:,3);
+        if NN > 1
+            for ii = 2:NN
+                tmpPoints = [Input(ii).X,Input(ii).Y,Input(ii).Z];
+                if AXtmp == 1
+                    %rotation with respect to x-axis
+                    Rx = [1,0,0; 0,cos(Theta_P),-sin(Theta_P); 0,sin(Theta_P),cos(Theta_P)];
+                    tmpPoints = (Rx*tmpPoints')';
+                elseif AXtmp == 2
+                    %rotation with respect to y-axis
+                    Ry = [cos(Theta_P),0,sin(Theta_P); 0,1,0; -sin(Theta_P),0,cos(Theta_P)];
+                    tmpPoints = (Ry*tmpPoints')';
+                elseif AXtmp == 3
+                    %rotation with respect to z-axis
+                    Rz = [cos(Theta_P),-sin(Theta_P),0; sin(Theta_P),cos(Theta_P),0; 0,0,1];
+                    tmpPoints = (Rz*tmpPoints')';
+                elseif AXtmp == 4
+                    %rotation with respect to a random axis
+                    %The same u is used
+                    R_arb = [cos(Theta_P)+u(1)^2*(1-cos(Theta_P)), u(1)*u(2)*(1-cos(Theta_P))-u(3)*sin(Theta_P), u(1)*u(3)*(1-cos(Theta_P))+u(2)*sin(Theta_P);
+                             u(1)*u(2)*(1-cos(Theta_P))+u(3)*sin(Theta_P), cos(Theta_P)+u(2)^2*(1-cos(Theta_P)), u(2)*u(3)*(1-cos(Theta_P))-u(1)*sin(Theta_P);
+                             u(1)*u(3)*(1-cos(Theta_P))-u(2)*sin(Theta_P), u(2)*u(3)*(1-cos(Theta_P))+u(1)*sin(Theta_P), cos(Theta_P)+u(3)^2*(1-cos(Theta_P))];
+                    tmpPoints = (R_arb*tmpPoints')';
+                else
+                    %This is implemented before
+                end
+                tmpPoints(1,:) = tmpPoints(1,:)+DelX_P;
+                tmpPoints(2,:) = tmpPoints(2,:)+DelY_P;
+                tmpPoints(3,:) = tmpPoints(3,:)+DelZ_P;
+
+                Aligned(ii).X = tmpPoints(:,1);
+                Aligned(ii).Y = tmpPoints(:,2); 
+                Aligned(ii).Z = tmpPoints(:,3);
+            end
+        end
         Cost_Current = Cost_Proposed;
         Aligned.Error = Cost_Current;
         
