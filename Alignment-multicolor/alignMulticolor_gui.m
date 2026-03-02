@@ -169,10 +169,13 @@ function [guiFig]=alignMulticolor_gui()
         YLimits = ylim;
         ID1 = Data(1).X > XLimits(1) & Data(1).X < XLimits(2) & ...
             Data(1).Y > YLimits(1) & Data(1).Y < YLimits(2);
-        ID2 = Data(2).X > XLimits(1) & Data(2).X < XLimits(2) & ...
-            Data(2).Y > YLimits(1) & Data(2).Y < YLimits(2);
-        ID3 = Data(3).X > XLimits(1) & Data(3).X < XLimits(2) & ...
-            Data(3).Y > YLimits(1) & Data(3).Y < YLimits(2);
+        if length(Data) > 1
+            ID2 = Data(2).X > XLimits(1) & Data(2).X < XLimits(2) & ...
+                Data(2).Y > YLimits(1) & Data(2).Y < YLimits(2);
+        elseif length(Data) > 2
+            ID3 = Data(3).X > XLimits(1) & Data(3).X < XLimits(2) & ...
+                Data(3).Y > YLimits(1) & Data(3).Y < YLimits(2);
+        end
         
         if isempty(Locs(1).X)
             for nn = 1:length(Data)
@@ -224,7 +227,15 @@ function [guiFig]=alignMulticolor_gui()
 
     function saveData(~,~)
         
-        save([pathname,filename(1:end-4),sprintf('_ROIcount_%d',length(Locs))],'Locs')
+        if pathname ~= 0 && filename ~= 0
+            save([pathname,filename(1:end-4),sprintf('_ROIcount-%d_colors-%d',size(Locs,1),size(Locs,2))],'Locs')
+        elseif pathname == 0 && filename ~= 0  
+            save([filename(1:end-4),sprintf('_ROIcount-%d_colors-%d',size(Locs,1),size(Locs,2))],'Locs')
+        elseif pathname ~= 0 && filename == 0
+            save([pathname,sprintf('ROIcount-%d_colors-%d',size(Locs,1),size(Locs,2))],'Locs')
+        else
+            save(sprintf('ROIcount-%d_colors-%d',size(Locs,1),size(Locs,2)),'Locs')
+        end
 
     end
 
