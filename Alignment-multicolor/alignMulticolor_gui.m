@@ -63,8 +63,13 @@ function [guiFig]=alignMulticolor_gui()
         VariableInfo = who('-file', fullfile(pathname,filename));
         if ismember('Zc', VariableInfo)
             load(fullfile(pathname,filename),'Xc','Yc','Zc')
-        else
+        elseif ismember('Xc', VariableInfo)
             load(fullfile(pathname,filename),'Xc','Yc')
+        else
+            load(fullfile(pathname,filename),'Mol')
+            Xc = Mol.Xc;
+            Yc = Mol.Yc;
+            Zc = Mol.Zc;
         end
         
         Data(1).X = Xc;
@@ -83,8 +88,13 @@ function [guiFig]=alignMulticolor_gui()
         VariableInfo = who('-file', fullfile(pathname,filename));
         if ismember('Zc', VariableInfo)
             load(fullfile(pathname,filename),'Xc','Yc','Zc')
-        else
+        elseif ismember('Xc', VariableInfo)
             load(fullfile(pathname,filename),'Xc','Yc')
+        else
+            load(fullfile(pathname,filename),'Mol')
+            Xc = Mol.Xc;
+            Yc = Mol.Yc;
+            Zc = Mol.Zc;
         end
         
         Data(2).X = Xc;
