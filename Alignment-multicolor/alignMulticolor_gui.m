@@ -70,6 +70,7 @@ function [guiFig]=alignMulticolor_gui()
             Xc = Mol.Xc;
             Yc = Mol.Yc;
             Zc = Mol.Zc;
+            Data(1).Z = Zc;
         end
         
         Data(1).X = Xc;
@@ -95,6 +96,7 @@ function [guiFig]=alignMulticolor_gui()
             Xc = Mol.Xc;
             Yc = Mol.Yc;
             Zc = Mol.Zc;
+            Data(2).Z = Zc;
         end
         
         Data(2).X = Xc;
@@ -120,6 +122,7 @@ function [guiFig]=alignMulticolor_gui()
             Xc = Mol.Xc;
             Yc = Mol.Yc;
             Zc = Mol.Zc;
+            Data(3).Z = Zc;
         end
         
         Data(3).X = Xc;
@@ -225,7 +228,7 @@ function [guiFig]=alignMulticolor_gui()
                 if isfield(Data(1),'Z')
                     Locs(end,nn).Z = Data(nn).Z(ID);
                 else
-                    Locs(end,nn).Z = zeros(size(Locs(end).Y));
+                    Locs(end,nn).Z = zeros(size(Locs(end,nn).Y));
                 end
             end
         end
