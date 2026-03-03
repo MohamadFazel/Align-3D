@@ -243,7 +243,7 @@ for nn = 2:NChain
                     tmpPoints = (Rz*tmpPoints')';
                 elseif AXtmp == 4
                     %rotation with respect to a random axis
-                    %The same u is used
+                    %The u is the same as before
                     R_arb = [cos(Theta_P)+u(1)^2*(1-cos(Theta_P)), u(1)*u(2)*(1-cos(Theta_P))-u(3)*sin(Theta_P), u(1)*u(3)*(1-cos(Theta_P))+u(2)*sin(Theta_P);
                              u(1)*u(2)*(1-cos(Theta_P))+u(3)*sin(Theta_P), cos(Theta_P)+u(2)^2*(1-cos(Theta_P)), u(2)*u(3)*(1-cos(Theta_P))-u(1)*sin(Theta_P);
                              u(1)*u(3)*(1-cos(Theta_P))-u(2)*sin(Theta_P), u(2)*u(3)*(1-cos(Theta_P))+u(1)*sin(Theta_P), cos(Theta_P)+u(3)^2*(1-cos(Theta_P))];
