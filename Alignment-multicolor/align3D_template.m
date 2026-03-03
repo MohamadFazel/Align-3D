@@ -249,7 +249,7 @@ for nn = 2:NChain
                              u(1)*u(3)*(1-cos(Theta_P))-u(2)*sin(Theta_P), u(2)*u(3)*(1-cos(Theta_P))+u(1)*sin(Theta_P), cos(Theta_P)+u(3)^2*(1-cos(Theta_P))];
                     tmpPoints = (R_arb*tmpPoints')';
                 else
-                    %This is implemented before
+                    %This is implemented before so here we ignore it
                 end
                 tmpPoints(1,:) = tmpPoints(1,:)+DelX_P;
                 tmpPoints(2,:) = tmpPoints(2,:)+DelY_P;
