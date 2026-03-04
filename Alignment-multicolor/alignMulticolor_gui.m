@@ -188,10 +188,12 @@ function [guiFig]=alignMulticolor_gui()
         YLimits = ylim;
         ID1 = Data(1).X > XLimits(1) & Data(1).X < XLimits(2) & ...
             Data(1).Y > YLimits(1) & Data(1).Y < YLimits(2);
-        if length(Data) > 1
+        if length(Data) == 2
             ID2 = Data(2).X > XLimits(1) & Data(2).X < XLimits(2) & ...
                 Data(2).Y > YLimits(1) & Data(2).Y < YLimits(2);
         elseif length(Data) > 2
+            ID2 = Data(2).X > XLimits(1) & Data(2).X < XLimits(2) & ...
+                Data(2).Y > YLimits(1) & Data(2).Y < YLimits(2);
             ID3 = Data(3).X > XLimits(1) & Data(3).X < XLimits(2) & ...
                 Data(3).Y > YLimits(1) & Data(3).Y < YLimits(2);
         end
