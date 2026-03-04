@@ -272,7 +272,7 @@ function [guiFig]=alignMulticolor_gui()
         Zall = [];
         AllLocs = [];
         for ii = 1:size(Locs,1)
-        
+        %The loop iterates over localizations selected from different ROIs
             if ii/10 == floor(ii/10)
                 set(Iteration,'String',ii)
                 pause(0.05)
