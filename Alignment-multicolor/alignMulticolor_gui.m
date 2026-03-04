@@ -298,16 +298,16 @@ function [guiFig]=alignMulticolor_gui()
                     AllLocs(nn).Y = tmp(nn).Y;
                     AllLocs(nn).Z = tmp(nn).Z;
                 else
-                    AllLocs(nn).X = cat(1,AllLocs(nn).X,tmp.X);
-                    AllLocs(nn).Y = cat(1,AllLocs(nn).Y,tmp.Y);
-                    AllLocs(nn).Z = cat(1,AllLocs(nn).Z,tmp.Z);
+                    AllLocs(nn).X = cat(1,AllLocs(nn).X,tmp(nn).X);
+                    AllLocs(nn).Y = cat(1,AllLocs(nn).Y,tmp(nn).Y);
+                    AllLocs(nn).Z = cat(1,AllLocs(nn).Z,tmp(nn).Z);
                 end
             end
         end
 
-        %figure;hold;
+        figure;hold;
         for nn = 1:length(AllLocs)
-            figure;plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
+            plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
         end
 
     end
