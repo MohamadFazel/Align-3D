@@ -248,11 +248,11 @@ function [guiFig]=alignMulticolor_gui()
 
     function saveData(~,~)
         
-        if pathname ~= 0 && filename ~= 0
+        if ~isnumeric(pathname) && ~isnumeric(filename)
             save([pathname,filename(1:end-4),sprintf('_ROIcount-%d_colors-%d',size(Locs,1),size(Locs,2))],'Locs')
-        elseif pathname == 0 && filename ~= 0  
+        elseif isnumeric(pathname) && ~isnumeric(filename)  
             save([filename(1:end-4),sprintf('_ROIcount-%d_colors-%d',size(Locs,1),size(Locs,2))],'Locs')
-        elseif pathname ~= 0 && filename == 0
+        elseif ~isnumeric(pathname) && isnumeric(filename)
             save([pathname,sprintf('ROIcount-%d_colors-%d',size(Locs,1),size(Locs,2))],'Locs')
         else
             save(sprintf('ROIcount-%d_colors-%d',size(Locs,1),size(Locs,2)),'Locs')
