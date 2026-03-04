@@ -57,7 +57,6 @@ function [guiFig]=alignMulticolor_gui()
     Xall = [];
     Yall = [];
     Zall = [];
-    AllLocs = [];
 
     function loadData1(~,~)
         [filename, pathname]=uigetfile(pwd,'\*.mat;*.ics;*.h5');
@@ -289,26 +288,20 @@ function [guiFig]=alignMulticolor_gui()
             %Locs(ii,:).Z = Locs(ii,:).Z*0.8;
             tmp = align3D_template(Temp,Locs(ii,:),Start,Cutoff,NChain,PlotFlag,VideoFlag);
             for nn = 1:length(tmp)
-                AlignedParticles(ii).Locs(nn).X = tmp(nn).X;
-                AlignedParticles(ii).Locs(nn).Y = tmp(nn).Y;
-                AlignedParticles(ii).Locs(nn).Z = tmp(nn).Z;
-                AlignedParticles(ii).Error = tmp(1).Error;
-                if ii == 1
-                    AllLocs(nn).X = tmp(nn).X;
-                    AllLocs(nn).Y = tmp(nn).Y;
-                    AllLocs(nn).Z = tmp(nn).Z;
-                else
-                    AllLocs(nn).X = cat(1,AllLocs(nn).X,tmp.X);
-                    AllLocs(nn).Y = cat(1,AllLocs(nn).Y,tmp.Y);
-                    AllLocs(nn).Z = cat(1,AllLocs(nn).Z,tmp.Z);
-                end
+                AlignedParticles(nn).X = tmp(nn).X;
+                AlignedParticles(nn).Y = tmp(nn).Y;
+                AlignedParticles(nn).Z = tmp().Z;
+                AlignedParticles(nn).Error = tmp(ii).Error;
+                AllLocs(nn).X = cat(1,AllLocs(nn).X,tmp.X);
+                AllLocs(nn).Y = cat(1,AllLocs(nn).Y,tmp.Y);
+                AllLocs(nn).Z = cat(1,AllLocs(nn).Z,tmp.Z);
             end
+
+            
+
         end
 
-        %figure;hold;
-        for nn = 1:length(AllLocs)
-            figure;plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
-        end
+        figure;plot3(Xall,Yall,Zall,'.')
 
     end
 

@@ -70,6 +70,7 @@ NN = length(Input);
 Aligned(NN).X = [];
 Aligned(NN).Y = [];
 Aligned(NN).Z = [];
+Aligned(NN).Error = [];
 
 %Moving the center of mass of template to the origin
 if size(Temp.X,1) == 1
@@ -258,10 +259,11 @@ for nn = 2:NChain
                 Aligned(ii).X = tmpPoints(:,1);
                 Aligned(ii).Y = tmpPoints(:,2); 
                 Aligned(ii).Z = tmpPoints(:,3);
+                Aligned(ii).Error = Cost_Current;
+
             end
         end
         Cost_Current = Cost_Proposed;
-        Aligned.Error = Cost_Current;
         
     else
         Theta(nn) = Theta(nn-1);
