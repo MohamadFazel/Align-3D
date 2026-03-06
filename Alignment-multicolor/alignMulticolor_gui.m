@@ -310,6 +310,7 @@ function [guiFig]=alignMulticolor_gui()
         figure;hold;
         for nn = 1:length(AllLocs)
             plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
+            xlabel('X[nm]');xlabel('Y[nm]');xlabel('Y[nm]')
         end
 
     end
