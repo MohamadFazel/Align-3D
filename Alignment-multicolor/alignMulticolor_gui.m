@@ -312,6 +312,12 @@ function [guiFig]=alignMulticolor_gui()
             plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
             xlabel('X[nm]');xlabel('Y[nm]');xlabel('Y[nm]')
         end
+        
+        for nn = 1:length(AllLocs)
+            figure;plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
+            xlabel('X[nm]');xlabel('Y[nm]');xlabel('Y[nm]')
+            title('Data#%d',nn)
+        end
 
     end
 
