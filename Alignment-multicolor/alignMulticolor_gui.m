@@ -310,7 +310,7 @@ function [guiFig]=alignMulticolor_gui()
         figure;hold;
         for nn = 1:length(AllLocs)
             plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
-            xlabel('X[nm]');xlabel('Y[nm]');xlabel('Y[nm]')
+            xlabel('X[nm]');ylabel('Y[nm]');ylabel('Y[nm]')
         end
         if length(AllLocs) == 2
             legend('Data #1','Data #2')
@@ -320,7 +320,7 @@ function [guiFig]=alignMulticolor_gui()
         
         for nn = 1:length(AllLocs)
             figure;plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
-            xlabel('X[nm]');xlabel('Y[nm]');xlabel('Y[nm]')
+            xlabel('X[nm]');ylabel('Y[nm]');ylabel('Y[nm]')
             title(sprintf('Data #%d',nn))
         end
 
