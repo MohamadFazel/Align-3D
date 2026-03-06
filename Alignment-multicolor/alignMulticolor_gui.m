@@ -2,7 +2,7 @@ function [guiFig]=alignMulticolor_gui()
 
     guiFig = figure('NumberTitle','off','Resize','off','Units','Pixels',...
              'Name','align particles user interface','Visible','on',...
-             'Interruptible','off','Position',[400,300,700,500]);
+             'Interruptible','off','HandleVisibility','callback','Position',[400,300,700,500]);
 
     Ax = uiaxes(guiFig,'Position',[15,15,530,480]);
 
@@ -310,7 +310,7 @@ function [guiFig]=alignMulticolor_gui()
         figure;hold;
         for nn = 1:length(AllLocs)
             plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
-            xlabel('X[nm]');ylabel('Y[nm]');ylabel('Y[nm]')
+            xlabel('X [nm]');ylabel('Y [nm]');zlabel('Z [nm]')
         end
         if length(AllLocs) == 2
             legend('Data #1','Data #2')
@@ -320,7 +320,7 @@ function [guiFig]=alignMulticolor_gui()
         
         for nn = 1:length(AllLocs)
             figure;plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
-            xlabel('X[nm]');ylabel('Y[nm]');ylabel('Y[nm]')
+            xlabel('X [nm]');ylabel('Y [nm]');zlabel('Z [nm]')
             title(sprintf('Data #%d',nn))
         end
 
