@@ -154,7 +154,6 @@ end
 %In each iteration of the for-loop random shifts and rotations are proposed 
 %of the cost/error decreases the proposed values are accepted.
 for nn = 2:NChain
-    
     Theta_P = Theta(nn-1)+0.13*randn();
     DelX_P = DelX(nn-1) + 0.2*randn();
     DelY_P = DelY(nn-1) + 0.2*randn();
@@ -190,9 +189,9 @@ for nn = 2:NChain
     end
     
     %implementing shifts
-    Points(1,:) = Points(1,:)+DelX_P;
-    Points(2,:) = Points(2,:)+DelY_P;
-    Points(3,:) = Points(3,:)+DelZ_P;
+    Points(:,1) = Points(:,1)+DelX_P;
+    Points(:,2) = Points(:,2)+DelY_P;
+    Points(:,3) = Points(:,3)+DelZ_P;
 
     %calculating error/cost
     [~,Dis]=knnsearch([TempX,TempY,TempZ],Points);
@@ -252,9 +251,9 @@ for nn = 2:NChain
                 else
                     %This is implemented before so here we ignore it
                 end
-                tmpPoints(1,:) = tmpPoints(1,:)+DelX_P;
-                tmpPoints(2,:) = tmpPoints(2,:)+DelY_P;
-                tmpPoints(3,:) = tmpPoints(3,:)+DelZ_P;
+                tmpPoints(:,1) = tmpPoints(:,1)+DelX_P;
+                tmpPoints(:,2) = tmpPoints(:,2)+DelY_P;
+                tmpPoints(:,3) = tmpPoints(:,3)+DelZ_P;
 
                 Aligned(ii).X = tmpPoints(:,1);
                 Aligned(ii).Y = tmpPoints(:,2); 

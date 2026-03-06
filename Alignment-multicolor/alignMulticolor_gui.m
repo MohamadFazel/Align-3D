@@ -236,7 +236,7 @@ function [guiFig]=alignMulticolor_gui()
             end
         end
 
-        set(ROIcount,'String',length(Locs))
+        set(ROIcount,'String',size(Locs,1))
         Xs = linspace(XLimits(1),XLimits(2),10);
         Ys = linspace(YLimits(1),YLimits(2),10);
         plot(Xs,YLimits(1)*ones(1,10),'r')
