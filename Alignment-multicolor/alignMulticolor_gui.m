@@ -316,7 +316,7 @@ function [guiFig]=alignMulticolor_gui()
         for nn = 1:length(AllLocs)
             figure;plot3(AllLocs(nn).X,AllLocs(nn).Y,AllLocs(nn).Z,'.')
             xlabel('X[nm]');xlabel('Y[nm]');xlabel('Y[nm]')
-            title('Data#%d',nn)
+            title(sprintf('Data #%d',nn))
         end
 
     end
