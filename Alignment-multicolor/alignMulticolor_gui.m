@@ -171,7 +171,7 @@ function [guiFig]=alignMulticolor_gui()
             if ii == 1
                 tmp = Locs;
             else
-                tmp = cat(2,tmp,Locs);
+                tmp = cat(1,tmp,Locs);
             end
         end
         if NIter > 1
