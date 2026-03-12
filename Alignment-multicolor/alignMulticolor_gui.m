@@ -262,16 +262,13 @@ function [guiFig]=alignMulticolor_gui()
 
     function saveAligned(~,~)
         
-        save([pathname,filename(1:end-4),'_Aligned'],'AlignedParticles','Xall','Yall','Zall')
+        save([pathname,filename(1:end-4),'_Aligned'],'AlignedParticles','AllLocs')
 
     end
 
     function alignParticles(~,~)
 
         AlignedParticles = [];
-        Xall = [];
-        Yall = [];
-        Zall = [];
         AllLocs = [];
         for ii = 1:size(Locs,1)
         %The loop iterates over localizations selected from different ROIs
@@ -285,11 +282,12 @@ function [guiFig]=alignMulticolor_gui()
             Start.ShiftY = 0;
             Start.ShiftZ = 0;
             Cutoff = 50;
-            NChain = 1000;
+            NChain = 10000;
             PlotFlag = 0;
             VideoFlag = 0;
             %Aligning ROIs one-by-one
-            tmp = align3D_template(Temp,Locs(ii,:),Start,Cutoff,NChain,PlotFlag,VideoFlag);
+%             tmp = align3D_template(Temp,Locs(ii,:),Start,Cutoff,NChain,PlotFlag,VideoFlag);
+            tmp = align3D_template2(Temp,Locs(ii,:),Start,Cutoff,NChain,PlotFlag,VideoFlag);
             for nn = 1:length(tmp)
                 AlignedParticles(ii).Locs(nn).X = tmp(nn).X;
                 AlignedParticles(ii).Locs(nn).Y = tmp(nn).Y;

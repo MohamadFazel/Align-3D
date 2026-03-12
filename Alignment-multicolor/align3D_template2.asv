@@ -1,0 +1,309 @@
+function [Aligned,Chain] = align3D_template2(Temp,Input,Start,Penalty,NChain,PlotFlag,VideoFlag)
+%align_template Aligns a set of points to a template.
+% [Aligned,Chain] = BaGoL.align_template(Temp,Input,Start,Penalty,NChain,PlotFlag,VideoFlag)
+%
+% This method finds the shift and rotation of a set of points that minimizes
+% the sum of distances of pairs from the sample to the template. Pair
+% distances above a cutoff and unmatched points use the cost at the 
+% cutoff distance. It shifts around the set of given points and rotates 
+% them around a random axis by a random angle. 
+%
+% INPUTS:
+%   Temp:       SMD Structure of the template with fields
+%       X:      X positions of the template (nm)(Nx1)
+%       Y:      Y positions of the template (nm)(Nx1)
+%       Z:      Z positions of the template (nm)(Nx1)
+%   Input:      SMD Structure of the sample with fields
+%       X:      X positions of the sample (nm)(Mx1)
+%       Y:      Y positions of the sample (nm)(Mx1)
+%       Z:      Z positions of the sample (nm)(Mx1)
+%   Start:      Structure of starting values for shift and rotation
+%       Theta:  (radians)
+%       ShiftX: (nm)
+%       ShiftY: (nm)  
+%       ShiftZ: (nm)
+%    Penalty:   Saturation distance for cost function (nm) 
+%    NChain:   Number of jumps in MCMC algorithm. (Default = 5000)
+%    PlotFlag: 0 or 1, Show an animation of the accepted jumps. (Default = 0)
+%
+% OUTPUTS:
+%    Aligned:  Structure containing the aligned coordinates
+%       X:     (Mx1) (nm)
+%       Y:     (Mx1) (nm)
+%       Z:     (Mx1) (nm)
+%       Error: distances between input template and data + penalties
+%    Chain:    Structure array of accepted jumps in parameter space 
+%       Theta:      Angle (radians) (NChain x 1)
+%       Ax:         unit vector (NChain x 1)
+%       XShift:     Sample shift in X (nm) (NChain x 1)
+%       YShift:     Sample shift in Y (nm) (NChain x 1)
+%       ZShift:     Sample shift in Z (nm) (NChain x 1)
+%       Error:      sum distances between the template and data + penalties
+%
+% Created by:
+%    Mohamadreza Fazel (LidkeLab 2019)
+
+if nargin < 4
+   error('There must be at leat 4 inputs.') 
+end
+
+if nargin < 5
+   NChain = 5000;
+   PlotFlag = 0;
+   VideoFlag = 0;
+end
+
+if nargin < 6
+   PlotFlag = 0; 
+   VideoFlag = 0;
+end
+
+if nargin < 7
+   VideoFlag = 0;
+end
+
+if VideoFlag == 1 && PlotFlag == 0
+    error('to make a video PlotFlag must be 1 as well')
+end
+
+NN = length(Input);
+Aligned(NN).X = [];
+Aligned(NN).Y = [];
+Aligned(NN).Z = [];
+Aligned(NN).Error = [];
+
+%Moving the center of mass of template to the origin
+if size(Temp.X,1) == 1
+    TempX = Temp.X' - mean(Temp.X);
+    TempY = Temp.Y' - mean(Temp.Y);
+    TempZ = Temp.Z' - mean(Temp.Z);
+else
+    TempX = Temp.X - mean(Temp.X);
+    TempY = Temp.Y - mean(Temp.Y);
+    TempZ = Temp.Z - mean(Temp.Z);
+end
+
+XLim = [min(TempX)-10 max(TempX)+10];
+YLim = [min(TempY)-10 max(TempY)+10];
+
+for ii = 1:length(Input)
+    if size(Input(1).X,1) == 1
+        Input(ii).X = Input(ii).X'-mean(Input(ii).X);
+        Input(ii).Y = Input(ii).Y'-mean(Input(ii).Y);
+        Input(ii).Z = Input(ii).Z'-mean(Input(ii).Z);
+    else
+        Input(ii).X = Input(ii).X-mean(Input(ii).X);
+        Input(ii).Y = Input(ii).Y-mean(Input(ii).Y);
+        Input(ii).Z = Input(ii).Z-mean(Input(ii).Z);
+    end
+end
+
+X = Input(1).X;
+Y = Input(1).Y;
+Z = Input(1).Z;
+
+%Finding the initial difference (cost/error) between data and template
+Points = [X,Y,Z];
+[~,Dis] = knnsearch([TempX,TempY,TempZ],Points);
+Dis = abs(Dis);
+Dis(Dis>Penalty) = Penalty;
+Cost_Current = sum(Dis);
+
+Start_Theta = Start.Theta;
+Start_ShiftX = Start.ShiftX;
+Start_ShiftY = Start.ShiftY;
+Start_ShiftZ = Start.ShiftZ;
+
+ThetaX = zeros(NChain,1);
+ThetaY = zeros(NChain,1);
+ThetaZ = zeros(NChain,1);
+ThetaRnd = zeros(NChain,1);
+Ax = zeros(NChain,1);
+DelX = zeros(NChain,1);
+DelY = zeros(NChain,1);
+DelZ = zeros(NChain,1);
+Cost = zeros(NChain,1);
+
+ThetaX(1) = Start_Theta;
+ThetaY(1) = 0;
+ThetaZ(1) = 0;
+ThetaRnd(1) = 0;
+Ax(1) = 0;
+DelX(1) = Start_ShiftX;
+DelY(1) = Start_ShiftY;
+DelZ(1) = Start_ShiftZ;
+Cost(1) = Cost_Current;
+
+%Ploting template and data
+if PlotFlag
+    %making video
+    if VideoFlag
+        V = VideoWriter('Video.avi');
+        V.FrameRate = 3;
+        open(V)
+    end
+     figure(110);
+     plot3(TempX,TempY,TempZ,'ok','linewidth',1.25)
+     hold;
+     plot3(Points(:,1),Points(:,2),Points(:,3),'.')
+     xlim(XLim);ylim(YLim)
+     legend('proposal: 1')
+     xlim([-120 120]);ylim([-120 120]);zlim([-120 120])
+     %xlim([-40 40]);ylim([-40 40]);zlim([-40 40])
+     hold off
+     if VideoFlag
+        F=getframe(gcf);
+        writeVideo(V,F);
+     end
+end
+
+%In each iteration of the for-loop random shifts and rotations are proposed 
+%of the cost/error decreases the proposed values are accepted.
+for nn = 2:NChain
+    DelX_P = DelX(nn-1) + 0.2*randn();
+    DelY_P = DelY(nn-1) + 0.2*randn();
+    DelZ_P = DelZ(nn-1) + 0.2*randn();
+
+    %propose a rotation
+    Points = [X,Y,Z];
+    AXtmp = randi(5);
+    if AXtmp == 1
+        %rotation with respect to x-axis
+        ThetaX_P = ThetaX(nn-1)+0.13*randn();
+        ThetaY_P = ThetaY(nn-1);
+        ThetaZ_P = ThetaZ(nn-1);
+        ThetaRnd_P = ThetaRnd(nn-1);
+        Rx = [1,0,0; 0,cos(ThetaX_P),-sin(ThetaX_P); 0,sin(ThetaX_P),cos(ThetaX_P)];
+        Points = (Rx*Points')';
+    elseif AXtmp == 2
+        %rotation with respect to y-axis
+        ThetaX_P = ThetaX(nn-1);
+        ThetaY_P = ThetaY(nn-1)+0.13*randn();
+        ThetaZ_P = ThetaZ(nn-1);
+        ThetaRnd_P = ThetaRnd(nn-1);
+        Ry = [cos(ThetaY_P),0,sin(ThetaY_P); 0,1,0; -sin(ThetaY_P),0,cos(ThetaY_P)];
+        Points = (Ry*Points')';
+    elseif AXtmp == 3
+        %rotation with respect to z-axis
+        ThetaX_P = ThetaX(nn-1);
+        ThetaY_P = ThetaY(nn-1);
+        ThetaZ_P = ThetaZ(nn-1)+0.13*randn();
+        ThetaRnd_P = ThetaRnd(nn-1);
+        Rz = [cos(ThetaZ_P),-sin(Theta_P),0; sin(Theta_P),cos(Theta_P),0; 0,0,1];
+        Points = (Rz*Points')';
+    elseif AXtmp == 4
+        %rotation with respect to a random axis
+        ThetaX_P = ThetaX(nn-1);
+        ThetaY_P = ThetaY(nn-1);
+        ThetaZ_P = ThetaZ(nn-1);
+        ThetaRnd_P = ThetaRnd(nn-1)+0.13*randn();
+        u = randn(1,3);
+        u = u/sqrt(sum(u.^2));
+        R_arb = [cos(Theta_P)+u(1)^2*(1-cos(Theta_P)), u(1)*u(2)*(1-cos(Theta_P))-u(3)*sin(Theta_P), u(1)*u(3)*(1-cos(Theta_P))+u(2)*sin(Theta_P);
+                 u(1)*u(2)*(1-cos(Theta_P))+u(3)*sin(Theta_P), cos(Theta_P)+u(2)^2*(1-cos(Theta_P)), u(2)*u(3)*(1-cos(Theta_P))-u(1)*sin(Theta_P);
+                 u(1)*u(3)*(1-cos(Theta_P))-u(2)*sin(Theta_P), u(2)*u(3)*(1-cos(Theta_P))+u(1)*sin(Theta_P), cos(Theta_P)+u(3)^2*(1-cos(Theta_P))];
+        Points = (R_arb*Points')';
+    else
+        DelX_P = DelX(nn-1);
+        DelY_P = DelY(nn-1);
+        DelZ_P = DelZ(nn-1) + 2*randn();
+    end
+    
+    %implementing shifts
+    Points(:,1) = Points(:,1)+DelX_P;
+    Points(:,2) = Points(:,2)+DelY_P;
+    Points(:,3) = Points(:,3)+DelZ_P;
+
+    %calculating error/cost
+    [~,Dis]=knnsearch([TempX,TempY,TempZ],Points);
+    Dis = abs(Dis);
+    Dis(Dis>Penalty) = Penalty;
+    Cost_Proposed = sum(Dis);
+    Cost(nn) = Cost_Proposed;
+
+    if Cost_Current - Cost_Proposed > -rand()
+        if PlotFlag
+            figure(110);
+            plot3(TempX,TempY,TempZ,'ok','linewidth',1.25)
+            hold;
+            plot3(Points(:,1),Points(:,2),Points(:,3),'.')
+            title(sprintf('Step:%g',nn))
+            %xlim(XLim);ylim(YLim)
+            SP = sprintf('proposal: %g',nn);
+            legend(SP)
+            xlim([-120 120]);ylim([-120 120]);zlim([-120 120])
+            hold off
+            pause(0.5)
+            if VideoFlag
+                F = getframe(gcf);
+                writeVideo(V,F);
+            end
+        end
+        Theta(nn) = Theta_P;
+        Ax(nn) = AXtmp;
+        DelX(nn) = DelX_P;
+        DelY(nn) = DelY_P;
+        DelZ(nn) = DelZ_P;
+        Aligned(1).X = Points(:,1);
+        Aligned(1).Y = Points(:,2); 
+        Aligned(1).Z = Points(:,3);
+        if NN > 1
+            for ii = 2:NN
+                tmpPoints = [Input(ii).X,Input(ii).Y,Input(ii).Z];
+                if AXtmp == 1
+                    %rotation with respect to x-axis
+                    Rx = [1,0,0; 0,cos(Theta_P),-sin(Theta_P); 0,sin(Theta_P),cos(Theta_P)];
+                    tmpPoints = (Rx*tmpPoints')';
+                elseif AXtmp == 2
+                    %rotation with respect to y-axis
+                    Ry = [cos(Theta_P),0,sin(Theta_P); 0,1,0; -sin(Theta_P),0,cos(Theta_P)];
+                    tmpPoints = (Ry*tmpPoints')';
+                elseif AXtmp == 3
+                    %rotation with respect to z-axis
+                    Rz = [cos(Theta_P),-sin(Theta_P),0; sin(Theta_P),cos(Theta_P),0; 0,0,1];
+                    tmpPoints = (Rz*tmpPoints')';
+                elseif AXtmp == 4
+                    %rotation with respect to a random axis
+                    %The u is the same as before
+                    R_arb = [cos(Theta_P)+u(1)^2*(1-cos(Theta_P)), u(1)*u(2)*(1-cos(Theta_P))-u(3)*sin(Theta_P), u(1)*u(3)*(1-cos(Theta_P))+u(2)*sin(Theta_P);
+                             u(1)*u(2)*(1-cos(Theta_P))+u(3)*sin(Theta_P), cos(Theta_P)+u(2)^2*(1-cos(Theta_P)), u(2)*u(3)*(1-cos(Theta_P))-u(1)*sin(Theta_P);
+                             u(1)*u(3)*(1-cos(Theta_P))-u(2)*sin(Theta_P), u(2)*u(3)*(1-cos(Theta_P))+u(1)*sin(Theta_P), cos(Theta_P)+u(3)^2*(1-cos(Theta_P))];
+                    tmpPoints = (R_arb*tmpPoints')';
+                else
+                    %This is implemented before so here we ignore it
+                end
+                tmpPoints(:,1) = tmpPoints(:,1)+DelX_P;
+                tmpPoints(:,2) = tmpPoints(:,2)+DelY_P;
+                tmpPoints(:,3) = tmpPoints(:,3)+DelZ_P;
+
+                Aligned(ii).X = tmpPoints(:,1);
+                Aligned(ii).Y = tmpPoints(:,2); 
+                Aligned(ii).Z = tmpPoints(:,3);
+                Aligned(ii).Error = Cost_Current;
+
+            end
+        end
+        Cost_Current = Cost_Proposed;
+        
+    else
+        Theta(nn) = Theta(nn-1);
+        Ax(nn) = Ax(nn-1);
+        DelX(nn) = DelX(nn-1);
+        DelY(nn) = DelY(nn-1);
+        DelZ(nn) = DelZ(nn-1);
+    end
+    
+end
+
+if VideoFlag
+    close(V)
+end
+
+Chain.Theta = Theta;
+Chain.Ax = Ax;
+Chain.XShift = DelX;
+Chain.YShift = DelY;
+Chain.ZShift = DelZ;
+Chain.Error = Cost;
+
+end
