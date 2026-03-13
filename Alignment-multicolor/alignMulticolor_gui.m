@@ -103,12 +103,12 @@ function [guiFig]=alignMulticolor_gui()
             Xc = Mol.Xc;
             Yc = Mol.Yc;
             Zc = Mol.Zc;
-            Data(1).Z = Zc;
+            Data(2).Z = Zc;
         elseif ismember('Zt', VariableInfo)
             load(fullfile(pathname,filename),'Xt','Yt','Zt')
             Xc = Xt;
             Yc = Yt;
-            Data(1).Z = Zt;
+            Data(2).Z = Zt;
         elseif ismember('Xt', VariableInfo)
             load(fullfile(pathname,filename),'Xt','Yt')
             Xc = Xt;
@@ -138,12 +138,12 @@ function [guiFig]=alignMulticolor_gui()
             Xc = Mol.Xc;
             Yc = Mol.Yc;
             Zc = Mol.Zc;
-            Data(1).Z = Zc;
+            Data(3).Z = Zc;
         elseif ismember('Zt', VariableInfo)
             load(fullfile(pathname,filename),'Xt','Yt','Zt')
             Xc = Xt;
             Yc = Yt;
-            Data(1).Z = Zt;
+            Data(3).Z = Zt;
         elseif ismember('Xt', VariableInfo)
             load(fullfile(pathname,filename),'Xt','Yt')
             Xc = Xt;
