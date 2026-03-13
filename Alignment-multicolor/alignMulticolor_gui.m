@@ -54,9 +54,6 @@ function [guiFig]=alignMulticolor_gui()
     Data = [];
     Temp = [];
     AlignedParticles = [];
-    Xall = [];
-    Yall = [];
-    Zall = [];
     AllLocs = [];
 
     function loadData1(~,~)
