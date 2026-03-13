@@ -73,14 +73,9 @@ function [guiFig]=alignMulticolor_gui()
             Zc = Mol.Zc;
             Data(1).Z = Zc;
         elseif ismember('Zt', VariableInfo)
-            load(fullfile(pathname,filename),'Xt','Yt','Zt')
-            Xc = Xt;
-            Yc = Yt;
-            Data(1).Z = Zt;
+
         elseif ismember('Xt', VariableInfo)
-            load(fullfile(pathname,filename),'Xt','Yt')
-            Xc = Xt;
-            Yc = Yt;
+            
         end
         
         Data(1).X = Xc;
@@ -101,21 +96,12 @@ function [guiFig]=alignMulticolor_gui()
             load(fullfile(pathname,filename),'Xc','Yc','Zc')
         elseif ismember('Xc', VariableInfo)
             load(fullfile(pathname,filename),'Xc','Yc')
-        elseif ismember('Mol', VariableInfo)
+        else
             load(fullfile(pathname,filename),'Mol')
             Xc = Mol.Xc;
             Yc = Mol.Yc;
             Zc = Mol.Zc;
-            Data(1).Z = Zc;
-        elseif ismember('Zt', VariableInfo)
-            load(fullfile(pathname,filename),'Xt','Yt','Zt')
-            Xc = Xt;
-            Yc = Yt;
-            Data(1).Z = Zt;
-        elseif ismember('Xt', VariableInfo)
-            load(fullfile(pathname,filename),'Xt','Yt')
-            Xc = Xt;
-            Yc = Yt;
+            Data(2).Z = Zc;
         end
         
         Data(2).X = Xc;
@@ -136,21 +122,12 @@ function [guiFig]=alignMulticolor_gui()
             load(fullfile(pathname,filename),'Xc','Yc','Zc')
         elseif ismember('Xc', VariableInfo)
             load(fullfile(pathname,filename),'Xc','Yc')
-        elseif ismember('Mol', VariableInfo)
+        else
             load(fullfile(pathname,filename),'Mol')
             Xc = Mol.Xc;
             Yc = Mol.Yc;
             Zc = Mol.Zc;
-            Data(1).Z = Zc;
-        elseif ismember('Zt', VariableInfo)
-            load(fullfile(pathname,filename),'Xt','Yt','Zt')
-            Xc = Xt;
-            Yc = Yt;
-            Data(1).Z = Zt;
-        elseif ismember('Xt', VariableInfo)
-            load(fullfile(pathname,filename),'Xt','Yt')
-            Xc = Xt;
-            Yc = Yt;
+            Data(3).Z = Zc;
         end
         
         Data(3).X = Xc;
