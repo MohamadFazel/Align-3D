@@ -196,7 +196,8 @@ for nn = 2:NChain
         ThetaX_P = ThetaX(nn-1);
         ThetaY_P = ThetaY(nn-1);
         ThetaZ_P = ThetaZ(nn-1);
-        ThetaRnd_P = ThetaRnd(nn-1)+0.13*randn();
+%         ThetaRnd_P = ThetaRnd(nn-1)+0.13*randn();
+        ThetaRnd_P = 0.1*randn();
         u = randn(1,3);
         u = u/sqrt(sum(u.^2));
         R_arb = [cos(ThetaRnd_P)+u(1)^2*(1-cos(ThetaRnd_P)), u(1)*u(2)*(1-cos(ThetaRnd_P))-u(3)*sin(ThetaRnd_P), u(1)*u(3)*(1-cos(ThetaRnd_P))+u(2)*sin(ThetaRnd_P);
@@ -251,7 +252,7 @@ for nn = 2:NChain
                 tmpPoints = [Input(ii).X,Input(ii).Y,Input(ii).Z];
                 if AXtmp == 1
                     %rotation with respect to x-axis
-                    ThetaX(nn) = ThetaX(nn-1) + ThetaX_P;
+                    ThetaX(nn) = ThetaX_P;
                     ThetaY(nn) = ThetaY(nn-1);
                     ThetaZ(nn) = ThetaZ(nn-1);
                     ThetaRnd(nn) = ThetaRnd(nn-1);
@@ -260,7 +261,7 @@ for nn = 2:NChain
                 elseif AXtmp == 2
                     %rotation with respect to y-axis
                     ThetaX(nn) = ThetaX(nn-1);
-                    ThetaY(nn) = ThetaY(nn-1) + ThetaY_P;
+                    ThetaY(nn) = ThetaY_P;
                     ThetaZ(nn) = ThetaZ(nn-1);
                     ThetaRnd(nn) = ThetaRnd(nn-1);
                     Ry = [cos(ThetaY_P),0,sin(ThetaY_P); 0,1,0; -sin(ThetaY_P),0,cos(ThetaY_P)];
@@ -279,7 +280,8 @@ for nn = 2:NChain
                     ThetaX(nn) = ThetaX(nn-1);
                     ThetaY(nn) = ThetaY(nn-1);
                     ThetaZ(nn) = ThetaZ(nn-1);
-                    ThetaRnd(nn) = ThetaRnd(nn-1) + ThetaRnd_P;
+                    %ThetaRnd(nn) = ThetaRnd(nn-1) + ThetaRnd_P;
+                    ThetaRnd(nn) = ThetaRnd_P;
                     R_arb = [cos(ThetaRnd_P)+u(1)^2*(1-cos(ThetaRnd_P)), u(1)*u(2)*(1-cos(ThetaRnd_P))-u(3)*sin(ThetaRnd_P), u(1)*u(3)*(1-cos(ThetaRnd_P))+u(2)*sin(ThetaRnd_P);
                              u(1)*u(2)*(1-cos(ThetaRnd_P))+u(3)*sin(ThetaRnd_P), cos(ThetaRnd_P)+u(2)^2*(1-cos(ThetaRnd_P)), u(2)*u(3)*(1-cos(ThetaRnd_P))-u(1)*sin(ThetaRnd_P);
                              u(1)*u(3)*(1-cos(ThetaRnd_P))-u(2)*sin(ThetaRnd_P), u(2)*u(3)*(1-cos(ThetaRnd_P))+u(1)*sin(ThetaRnd_P), cos(ThetaRnd_P)+u(3)^2*(1-cos(ThetaRnd_P))];
