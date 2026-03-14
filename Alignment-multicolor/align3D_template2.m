@@ -270,7 +270,7 @@ for nn = 2:NChain
                     %rotation with respect to z-axis
                     ThetaX(nn) = ThetaX(nn-1);
                     ThetaY(nn) = ThetaY(nn-1);
-                    ThetaZ(nn) = ThetaZ(nn-1) + ThetaZ_P;
+                    ThetaZ(nn) = ThetaZ_P;
                     ThetaRnd(nn) = ThetaRnd(nn-1);
                     Rz = [cos(ThetaZ_P),-sin(ThetaZ_P),0; sin(ThetaZ_P),cos(ThetaZ_P),0; 0,0,1];
                     tmpPoints = (Rz*tmpPoints')';
