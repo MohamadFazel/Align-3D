@@ -60,30 +60,40 @@ function [guiFig]=alignMulticolor_gui()
         [filename, pathname]=uigetfile(pwd,'\*.mat;*.ics;*.h5');
         VariableInfo = who('-file', fullfile(pathname,filename));
         if ismember('Zc', VariableInfo)
-            load(fullfile(pathname,filename),'Xc','Yc','Zc')
+            load(fullfile(pathname,filename),'Xc','Yc','Zc','cXprec','cYprec','cZprec')
         elseif ismember('Xc', VariableInfo)
-            load(fullfile(pathname,filename),'Xc','Yc')
+            load(fullfile(pathname,filename),'Xc','Yc','cXprec','cYprec')
         elseif ismember('Mol', VariableInfo)
             load(fullfile(pathname,filename),'Mol')
             Xc = Mol.Xc;
             Yc = Mol.Yc;
-            Zc = Mol.Zc;
-            Data(1).Z = Zc;
+            Data(1).Z = Mol.Zc;
+            Xprec = Mol.cXprec;
+            Yprec = Mol.cYprec;
+            Data(1).Zprec = Mol.cZprec;
         elseif ismember('Zt', VariableInfo)
             load(fullfile(pathname,filename),'Xt','Yt','Zt')
             Xc = Xt;
             Yc = Yt;
+            Xprec = tXprec;
+            Yprec = tYprec;
             Data(1).Z = Zt;
+            Data(1).Zprec = tZprec;
         elseif ismember('Xt', VariableInfo)
             load(fullfile(pathname,filename),'Xt','Yt')
             Xc = Xt;
             Yc = Yt;
+            Xprec = tXprec;
+            Yprec = tYprec;
         end
         
         Data(1).X = Xc;
         Data(1).Y = Yc;
+        Data(1).Xprec = Xprec;
+        Data(1).Yprec = Yprec;
         if ismember('Zc', VariableInfo)
            Data(1).Z = Zc;
+           Data(1).Zprec = Zprec;
         end
         
         hold(Ax,"on")
@@ -306,7 +316,7 @@ function [guiFig]=alignMulticolor_gui()
             Start.ShiftY = 0;
             Start.ShiftZ = 0;
             Cutoff = 50;
-            NChain = 10000;
+            NChain = 2000;
             PlotFlag = 0;
             VideoFlag = 0;
             %Aligning ROIs one-by-one

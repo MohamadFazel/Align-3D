@@ -135,7 +135,7 @@ DelZ(1) = Start_ShiftZ;
 Cost(1) = Cost_Current;
 
 %Ploting template and data
-if PlotFlag
+if PlotFlag == 1
     %making video
     if VideoFlag
         V = VideoWriter('Video.avi');
@@ -149,6 +149,7 @@ if PlotFlag
      xlim(XLim);ylim(YLim)
      legend('proposal: 1')
      xlim([-120 120]);ylim([-120 120]);zlim([-120 120])
+
      %xlim([-40 40]);ylim([-40 40]);zlim([-40 40])
      hold off
      if VideoFlag
@@ -220,19 +221,20 @@ for nn = 2:NChain
     Dis = abs(Dis);
     Dis(Dis>Penalty) = Penalty;
     Cost_Proposed = sum(Dis);
-    Cost(nn) = Cost_Proposed;
 
     if Cost_Current - Cost_Proposed > -rand()
-        if PlotFlag
-            figure(110);
+       Cost(nn) = Cost_Current;
+        if PlotFlag == 1
+            figure(110);subplot(1,NN,1)
             plot3(TempX,TempY,TempZ,'ok','linewidth',1.25)
             hold;
             plot3(Points(:,1),Points(:,2),Points(:,3),'.')
             title(sprintf('Step:%g',nn))
             %xlim(XLim);ylim(YLim)
-            SP = sprintf('proposal: %g',nn);
-            legend(SP)
+%             SP = sprintf('proposal: %g',nn);
+%             legend(SP)
             xlim([-120 120]);ylim([-120 120]);zlim([-120 120])
+            xlabel('X');ylabel('Y');zlabel('Z')
             hold off
             pause(0.5)
             if VideoFlag
@@ -244,6 +246,7 @@ for nn = 2:NChain
         DelX(nn) = DelX_P;
         DelY(nn) = DelY_P;
         DelZ(nn) = DelZ_P;
+
         Aligned(1).X = Points(:,1);
         Aligned(1).Y = Points(:,2); 
         Aligned(1).Z = Points(:,3);
@@ -256,7 +259,7 @@ for nn = 2:NChain
                     ThetaY(nn) = ThetaY(nn-1);
                     ThetaZ(nn) = ThetaZ(nn-1);
                     ThetaRnd(nn) = ThetaRnd(nn-1);
-                    Rx = [1,0,0; 0,cos(ThetaX_P),-sin(ThetaX_P); 0,sin(ThetaX_P),cos(ThetaX_P)];
+%                     Rx = [1,0,0; 0,cos(ThetaX_P),-sin(ThetaX_P); 0,sin(ThetaX_P),cos(ThetaX_P)];
                     tmpPoints = (Rx*tmpPoints')';
                 elseif AXtmp == 2
                     %rotation with respect to y-axis
@@ -264,7 +267,7 @@ for nn = 2:NChain
                     ThetaY(nn) = ThetaY_P;
                     ThetaZ(nn) = ThetaZ(nn-1);
                     ThetaRnd(nn) = ThetaRnd(nn-1);
-                    Ry = [cos(ThetaY_P),0,sin(ThetaY_P); 0,1,0; -sin(ThetaY_P),0,cos(ThetaY_P)];
+%                     Ry = [cos(ThetaY_P),0,sin(ThetaY_P); 0,1,0; -sin(ThetaY_P),0,cos(ThetaY_P)];
                     tmpPoints = (Ry*tmpPoints')';
                 elseif AXtmp == 3
                     %rotation with respect to z-axis
@@ -272,7 +275,7 @@ for nn = 2:NChain
                     ThetaY(nn) = ThetaY(nn-1);
                     ThetaZ(nn) = ThetaZ_P;
                     ThetaRnd(nn) = ThetaRnd(nn-1);
-                    Rz = [cos(ThetaZ_P),-sin(ThetaZ_P),0; sin(ThetaZ_P),cos(ThetaZ_P),0; 0,0,1];
+%                     Rz = [cos(ThetaZ_P),-sin(ThetaZ_P),0; sin(ThetaZ_P),cos(ThetaZ_P),0; 0,0,1];
                     tmpPoints = (Rz*tmpPoints')';
                 elseif AXtmp == 4
                     %rotation with respect to a random axis
@@ -282,9 +285,9 @@ for nn = 2:NChain
                     ThetaZ(nn) = ThetaZ(nn-1);
                     %ThetaRnd(nn) = ThetaRnd(nn-1) + ThetaRnd_P;
                     ThetaRnd(nn) = ThetaRnd_P;
-                    R_arb = [cos(ThetaRnd_P)+u(1)^2*(1-cos(ThetaRnd_P)), u(1)*u(2)*(1-cos(ThetaRnd_P))-u(3)*sin(ThetaRnd_P), u(1)*u(3)*(1-cos(ThetaRnd_P))+u(2)*sin(ThetaRnd_P);
-                             u(1)*u(2)*(1-cos(ThetaRnd_P))+u(3)*sin(ThetaRnd_P), cos(ThetaRnd_P)+u(2)^2*(1-cos(ThetaRnd_P)), u(2)*u(3)*(1-cos(ThetaRnd_P))-u(1)*sin(ThetaRnd_P);
-                             u(1)*u(3)*(1-cos(ThetaRnd_P))-u(2)*sin(ThetaRnd_P), u(2)*u(3)*(1-cos(ThetaRnd_P))+u(1)*sin(ThetaRnd_P), cos(ThetaRnd_P)+u(3)^2*(1-cos(ThetaRnd_P))];
+%                     R_arb = [cos(ThetaRnd_P)+u(1)^2*(1-cos(ThetaRnd_P)), u(1)*u(2)*(1-cos(ThetaRnd_P))-u(3)*sin(ThetaRnd_P), u(1)*u(3)*(1-cos(ThetaRnd_P))+u(2)*sin(ThetaRnd_P);
+%                              u(1)*u(2)*(1-cos(ThetaRnd_P))+u(3)*sin(ThetaRnd_P), cos(ThetaRnd_P)+u(2)^2*(1-cos(ThetaRnd_P)), u(2)*u(3)*(1-cos(ThetaRnd_P))-u(1)*sin(ThetaRnd_P);
+%                              u(1)*u(3)*(1-cos(ThetaRnd_P))-u(2)*sin(ThetaRnd_P), u(2)*u(3)*(1-cos(ThetaRnd_P))+u(1)*sin(ThetaRnd_P), cos(ThetaRnd_P)+u(3)^2*(1-cos(ThetaRnd_P))];
                     tmpPoints = (R_arb*tmpPoints')';
                 else
                     %This is implemented before so here we ignore it
@@ -292,6 +295,25 @@ for nn = 2:NChain
                 tmpPoints(:,1) = tmpPoints(:,1)+DelX_P;
                 tmpPoints(:,2) = tmpPoints(:,2)+DelY_P;
                 tmpPoints(:,3) = tmpPoints(:,3)+DelZ_P;
+                
+                if PlotFlag == 1
+                    figure(110);subplot(1,NN,ii)
+                    plot3(TempX,TempY,TempZ,'ok','linewidth',1.25)
+                    hold;
+                    plot3(tmpPoints(:,1),tmpPoints(:,2),tmpPoints(:,3),'.')
+                    title(sprintf('Step:%g',nn))
+                    xlabel('X');ylabel('Y');zlabel('Z')
+                    %xlim(XLim);ylim(YLim)
+%                     SP = sprintf('proposal: %g',nn);
+                    %legend(SP)
+                    xlim([-120 120]);ylim([-120 120]);zlim([-120 120])
+                    hold off
+                    pause(0.5)
+                    if VideoFlag
+                        F = getframe(gcf);
+                        writeVideo(V,F);
+                    end
+                end
 
                 Aligned(ii).X = tmpPoints(:,1);
                 Aligned(ii).Y = tmpPoints(:,2); 
@@ -311,12 +333,33 @@ for nn = 2:NChain
         DelX(nn) = DelX(nn-1);
         DelY(nn) = DelY(nn-1);
         DelZ(nn) = DelZ(nn-1);
+        Cost(nn) = Cost(nn-1);
     end
     
 end
 
 if VideoFlag
     close(V)
+end
+
+if PlotFlag == 2
+    figure;
+    subplot(2,3,1);plot(ThetaX);ylabel('\Theta_x[rad]');xlabel('iteration')
+    subplot(2,3,2);plot(ThetaY);ylabel('\Theta_y[rad]');xlabel('iteration')
+    subplot(2,3,3);plot(ThetaZ);ylabel('\Theta_z[rad]');xlabel('iteration')
+    subplot(2,3,4);plot(DelX);ylabel('X-shift[nm]');xlabel('iteration')
+    subplot(2,3,5);plot(DelY);ylabel('Y-shift[nm]');xlabel('iteration')
+    subplot(2,3,6);plot(DelZ);ylabel('Z-shift[nm]');xlabel('iteration')
+    figure;plot(Cost);ylabel('cost[nm]');xlabel('iteration')
+    figure;
+    for jj = 1:NN
+        subplot(1,NN,jj)
+        plot3(TempX,TempY,TempZ,'ok','linewidth',1.25)
+        hold;
+        plot3(Aligned(jj).X,Aligned(jj).Y,Aligned(jj).Z,'.')
+        xlabel('X');ylabel('Y');zlabel('Z')
+        xlim([-120 120]);ylim([-120 120]);zlim([-120 120])
+    end
 end
 
 Chain.ThetaX = ThetaX;

@@ -93,6 +93,29 @@ else
     Y = Input.Y;
     Z = Input.Z;
 end
+
+% if PlotFlag
+%     %making video
+%     if VideoFlag
+%         V = VideoWriter('Video.avi');
+%         V.FrameRate = 3;
+%         open(V)
+%     end
+%      figure(110);
+%      plot3(TempX,TempY,TempZ,'ok','linewidth',1.25)
+%      hold;
+%      plot3(Points(:,1),Points(:,2),Points(:,3),'.')
+%      xlim(XLim);ylim(YLim)
+%      legend('proposal: 1')
+%      xlim([-120 120]);ylim([-120 120]);zlim([-120 120])
+%      %xlim([-40 40]);ylim([-40 40]);zlim([-40 40])
+%      hold off
+%      if VideoFlag
+%         F=getframe(gcf);
+%         writeVideo(V,F);
+%      end
+% end
+
 %Moving the center of mass of the data to the origin
 X = X - mean(X);
 Y = Y - mean(Y);
@@ -128,17 +151,18 @@ Cost(1) = Cost_Current;
 if PlotFlag
     %making video
     if VideoFlag
-        V = VideoWriter('Video.avi');
+        V = VideoWriter('Video.mp4','MPEG-4');
         V.FrameRate = 3;
         open(V)
     end
-     figure(110);
-     plot3(TempX,TempY,TempZ,'ok','linewidth',1.25)
+     figure(110);set(gcf,'color','w')
+     plot3(TempX,TempY,TempZ,'or','linewidth',1.2)
      hold;
-     plot3(Points(:,1),Points(:,2),Points(:,3),'.')
+     plot3(Points(:,1),Points(:,2),Points(:,3),'.','color',[0,0.44,0.74])
      xlim(XLim);ylim(YLim)
      legend('proposal: 1')
-     xlim([-120 120]);ylim([-120 120]);zlim([-120 120])
+     xlim([-80 80]);ylim([-80 80]);zlim([-80 80])
+     view(-30,30)
      %xlim([-40 40]);ylim([-40 40]);zlim([-40 40])
      hold off
      if VideoFlag
@@ -213,14 +237,14 @@ for nn = 2:NChain
     if Cost_Current - Cost_Proposed > -rand()
         if PlotFlag
             figure(110);
-            plot3(TempX,TempY,TempZ,'ok','linewidth',1.25)
+            plot3(TempX,TempY,TempZ,'or','linewidth',1.2)
             hold;
-            plot3(Points(:,1),Points(:,2),Points(:,3),'.')
+            plot3(Points(:,1),Points(:,2),Points(:,3),'.','color',[0,0.44,0.74])
             title(sprintf('Step:%g',nn))
             %xlim(XLim);ylim(YLim)
             SP = sprintf('proposal: %g',nn);
             legend(SP)
-            xlim([-120 120]);ylim([-120 120]);zlim([-120 120])
+            xlim([-80 80]);ylim([-80 80]);zlim([-80 80])
             hold off
             pause(0.5)
             if VideoFlag
