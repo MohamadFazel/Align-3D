@@ -265,15 +265,21 @@ function [guiFig]=alignMulticolor_gui()
                 end
                 Locs(1,nn).X = Data(nn).X(ID);
                 Locs(1,nn).Y = Data(nn).Y(ID);
+                Locs(1,nn).Xprec = Data(nn).Xprec(ID);
+                Locs(1,nn).Yprec = Data(nn).Yprec(ID);
                 if isfield(Data(1),'Z')
                     Locs(1,nn).Z = Data(nn).Z(ID);
+                    Locs(1,nn).Zprec = Data(nn).Zprec(ID);
                 else
                     Locs(1,nn).Z = zeros(size(Locs(1,1).Y));
+                    Locs(1,nn).Zprec = ones(size(Locs(1,1).Y));
                 end
             end
         else
             Locs(end+1,length(Data)).X = [];
             Locs(end,length(Data)).Y = [];
+            Locs(end,length(Data)).Xprec = [];
+            Locs(end,length(Data)).Yprec = [];
             for nn = 1:length(Data)
                 if nn == 1
                     ID = ID1;
@@ -284,10 +290,14 @@ function [guiFig]=alignMulticolor_gui()
                 end
                 Locs(end,nn).X = Data(nn).X(ID);
                 Locs(end,nn).Y = Data(nn).Y(ID);
+                Locs(end,nn).Xprec = Data(nn).Xprec(ID);
+                Locs(end,nn).Yprec = Data(nn).Yprec(ID);
                 if isfield(Data(1),'Z')
                     Locs(end,nn).Z = Data(nn).Z(ID);
+                    Locs(end,nn).Zprec = Data(nn).Zprec(ID);
                 else
                     Locs(end,nn).Z = zeros(size(Locs(end,nn).Y));
+                    Locs(end,nn).Zprec = ones(size(Locs(end,nn).Y));
                 end
             end
         end
