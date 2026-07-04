@@ -121,25 +121,17 @@ function [guiFig]=alignMulticolor_gui()
             load(fullfile(pathname,filename),'Xt','Yt','Zt')
             Xc = Xt;
             Yc = Yt;
-            cXprec = tXprec;
-            cYprec = tYprec;
             Data(2).Z = Zt;
-            Data(2).Zprec = tZprec;
         elseif ismember('Xt', VariableInfo)
             load(fullfile(pathname,filename),'Xt','Yt')
             Xc = Xt;
             Yc = Yt;
-            cXprec = tXprec;
-            cYprec = tYprec;
         end
         
         Data(2).X = Xc;
         Data(2).Y = Yc;
-        Data(2).Xprec = cXprec;
-        Data(2).Yprec = cYprec;
         if ismember('Zc', VariableInfo)
            Data(2).Z = Zc;
-           Data(2).Zprec = cZprec;
         end
         
         %hold(Ax,"on")
