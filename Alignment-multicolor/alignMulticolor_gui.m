@@ -105,9 +105,9 @@ function [guiFig]=alignMulticolor_gui()
         [filename, pathname]=uigetfile(pwd,'\*.mat;*.ics;*.h5');
         VariableInfo = who('-file', fullfile(pathname,filename));
         if ismember('Zc', VariableInfo)
-            load(fullfile(pathname,filename),'Xc','Yc','Zc')
+            load(fullfile(pathname,filename),'Xc','Yc','Zc','cXprec','cYprec','cZprec')
         elseif ismember('Xc', VariableInfo)
-            load(fullfile(pathname,filename),'Xc','Yc')
+            load(fullfile(pathname,filename),'Xc','Yc','cXprec','cYprec')
         elseif ismember('Mol', VariableInfo)
             load(fullfile(pathname,filename),'Mol')
             Xc = Mol.Xc;
@@ -297,7 +297,7 @@ function [guiFig]=alignMulticolor_gui()
                     Locs(end,nn).Zprec = Data(nn).Zprec(ID);
                 else
                     Locs(end,nn).Z = zeros(size(Locs(end,nn).Y));
-                    Locs(end,nn).Zprec = ones(size(Locs(end,nn).Y));
+                    Locs(end,nn).Z = (size(Locs(end,nn).Y));
                 end
             end
         end
