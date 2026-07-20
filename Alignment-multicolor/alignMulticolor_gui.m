@@ -164,7 +164,7 @@ function [guiFig]=alignMulticolor_gui()
             cYprec = Mol.cYprec;
             Data(3).Zprec = Mol.cZprec;
         elseif ismember('Zt', VariableInfo)
-            load(fullfile(pathname,filename),'Xt','Yt','Zt')
+            load(fullfile(pathname,filename),'Xt','Yt','Zt','tXprec','tYprec','tZprec')
             Xc = Xt;
             Yc = Yt;
             cXprec = tXprec;
@@ -172,7 +172,7 @@ function [guiFig]=alignMulticolor_gui()
             Data(3).Z = Zt;
             Data(3).Zprec = tZprec;
         elseif ismember('Xt', VariableInfo)
-            load(fullfile(pathname,filename),'Xt','Yt')
+            load(fullfile(pathname,filename),'Xt','Yt','tXprec','tYprec')
             Xc = Xt;
             Yc = Yt;
             cXprec = tXprec;
