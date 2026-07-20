@@ -126,7 +126,7 @@ function [guiFig]=alignMulticolor_gui()
             Data(2).Z = Zt;
             Data(2).Zprec = tZprec;
         elseif ismember('Xt', VariableInfo)
-            load(fullfile(pathname,filename),'Xt','Yt')
+            load(fullfile(pathname,filename),'Xt','Yt','tXprec','tYprec')
             Xc = Xt;
             Yc = Yt;
             cXprec = tXprec;
